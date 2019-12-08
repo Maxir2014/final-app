@@ -23,7 +23,7 @@
     margin: 0.5rem 0;
 
 }
-.side-drawer a {
+.side-drawer a , nav-item {
     color: #521751;
     text-decoration: none;
 }

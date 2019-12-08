@@ -1,16 +1,13 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, {Fragment} from 'react';
 import { connect } from 'react-redux';
 
 import { userActions } from '../../Actions';
 import './Login.css'
+import { Redirect } from "react-router-dom";
 class Login extends React.Component {
     constructor(props) {
         super(props);
 
-
-        console.log(this.props.loggedIn);
-       this.props.logout();
         this.state = {
             email: '',
             password: '',
@@ -37,7 +34,8 @@ class Login extends React.Component {
     }
 
     render() {
-        const { loggingIn } = this.props;
+        const { loggedIn } = this.props;
+        if(loggedIn) { return <Redirect to={{ pathname: '/home' }} />}
         const { email, password, submitted } = this.state;
         return (
             <div className="login">
@@ -48,7 +46,16 @@ class Login extends React.Component {
                                 <div id="output"/>
                                 <div className="avatar"/>
                                 <div className="form-box">
+
                                     <form name="form" onSubmit={this.handleSubmit}>
+
+                                        { this.props.loginIn ?
+                                        (
+                                        <Fragment>
+                                            <div className="loader">Loading...</div>
+                                        </Fragment>
+                                        ):(
+                                        <Fragment>
                                         <div className='form-group'>
                                             <input type="text"
                                                    className="form-control"
@@ -72,6 +79,9 @@ class Login extends React.Component {
                                             <div className="help-block has-error">Password is required</div>
                                             }
                                         </div>
+                                        </Fragment>
+
+                                        )}
                                         <button className="btn btn-block login">
                                             Login
                                         </button>
@@ -85,10 +95,10 @@ class Login extends React.Component {
         );
     }
 }
-;
+
 function mapStateToProps(state) {
-    const { loggingIn, loggedIn } = state.authentication;
-    return { loggingIn };
+    const { loginIn, loggedIn } = state.authentication;
+    return { loginIn, loggedIn };
 }
 
 const actionCreators = {

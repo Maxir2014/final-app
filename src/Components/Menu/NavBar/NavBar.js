@@ -1,23 +1,45 @@
 //dependencies
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import './NavBar.css'
-export class NavBar extends Component {
-    render() {
-        let sideClass;
-        if(this.props.show === true) {
-            sideClass = 'side-drawer open'
-        }else{
-            sideClass = 'side-drawer';
-        }
-        return(
-            <nav className={sideClass}>
-                <ul>
-                    <li>
-                        <Link to={"/home"}> home </Link>
-                    </li>
-                </ul>
+import {connect} from "react-redux";
+import {userActions} from "../../../Actions";
+import {navActions} from "../../../Actions/nav";
+class NavBar extends Component {
+     render() {
+      return (
+            <nav className={this.props.sideClass}>
+                    { this.props.loggedIn ?
+                        (
+                            <ul>
+                                <li>
+                                    <Link to={"/home"} onClick={this.props.closeMenu}> home </Link>
+                                </li>
+                                <li>
+                                    <a href="" className="nav-item" onClick={this.props.logout}> Logout </a>
+                                </li>
+                            </ul>
+                            ):(
+                                <ul>
+                                    <Link to={"/login"} onClick={this.props.closeMenu}>Login </Link>
+                                </ul>
+                            )
+                        }
+
             </nav>
         );
     }
 }
+function mapStateToProps(state) {
+    const  { loggedIn } = state.authentication;
+    const { sideClass } = state.navHandler;
+    return { loggedIn ,  sideClass };
+}
+const actionCreators = {
+    logout: userActions.logout,
+    closeMenu: navActions.closeMenu,
+
+};
+
+const connectedNavBar = connect(mapStateToProps, actionCreators)(NavBar);
+export { connectedNavBar as NavBar };

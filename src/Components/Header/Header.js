@@ -7,24 +7,24 @@ import './Header.css';
 
 //components
 import { ToggleButton } from '../Menu';
+import {userActions} from "../../Actions";
+import {connect} from "react-redux";
 
-export class Header extends Component {
+ class Header extends Component {
     render() {
-        const isLoggedIn = false;
         return (
             <header className="toolbar">
                 <nav className="toolbar__navigation">
                     <div>
-                        <ToggleButton click={this.props.drawerClickHandler} />
+                        <ToggleButton />
                     </div>
                     <div className="toolbar__logo"><a href="/">LOGO</a></div>
                     <div className="spacer"/>
                     <div className="toolbar__navigation-items">
                         <ul>
                             <div>
-                                {isLoggedIn ? (
-                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                                    <a className="nav-link" onClick={Header.handleLogout}> Logout </a>
+                                {this.props.loggedIn ? (
+                                    <a className="nav-link" onClick={this.props.logout}> Logout </a>
                                 ) : (
                                     <>
                                         <Link to={"/login"}> Login </Link>
@@ -35,7 +35,18 @@ export class Header extends Component {
                     </div>
                 </nav>
             </header>
-
         );
     }
 }
+
+function mapStateToProps(state) {
+    const  { loggedIn } = state.authentication;
+    return {loggedIn};
+}
+
+const actionCreators = {
+    logout: userActions.logout
+};
+
+const connectedHeader = connect(mapStateToProps, actionCreators)(Header);
+export { connectedHeader as Header };
