@@ -9,4 +9,7 @@ export const userConstants = {
 
     LOGOUT: 'USERS_LOGOUT',
 
+
+    GET_AUTH_USER: 'GET_AUTH_USER',
+
 };

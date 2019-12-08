@@ -1,4 +1,4 @@
-import { userConstants } from '../Constants';
+import {navConstants, userConstants} from '../Constants';
 import { userService } from '../Services';
 import { alertActions } from './';
 import { history } from '../Utils';
@@ -8,7 +8,8 @@ export const userActions = {
     logout,
     register,
     getAll,
-    delete: _delete
+    delete: _delete,
+    authUser
 };
 
 function login(email, password) {
@@ -95,4 +96,8 @@ function _delete(id) {
     function request(id) { return { type: userConstants.DELETE_REQUEST, id } }
     function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
+}
+
+function authUser(action){
+    return { type: userConstants.GET_AUTH_USER}
 }

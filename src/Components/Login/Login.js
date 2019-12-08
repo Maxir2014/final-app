@@ -34,8 +34,12 @@ class Login extends React.Component {
     }
 
     render() {
-        const { loggedIn } = this.props;
-        if(loggedIn) { return <Redirect to={{ pathname: '/home' }} />}
+        const { loggedIn, user } = this.props;
+        if(loggedIn) {
+            console.log(user);
+            return <Redirect to={{ pathname: '/home' }} />
+
+        }
         const { email, password, submitted } = this.state;
         return (
             <div className="login">
@@ -97,13 +101,14 @@ class Login extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { loginIn, loggedIn } = state.authentication;
-    return { loginIn, loggedIn };
+    const { loginIn, loggedIn , user } = state.authentication;
+    return { loginIn, loggedIn, user };
 }
 
 const actionCreators = {
     login: userActions.login,
-    logout: userActions.logout
+    logout: userActions.logout,
+    authUser: userActions.authUser
 };
 
 const connectedLoginPage = connect(mapStateToProps, actionCreators)(Login);
