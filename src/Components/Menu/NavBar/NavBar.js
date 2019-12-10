@@ -22,6 +22,8 @@ class NavBar extends Component {
                             ):(
                                 <ul>
                                     <Link to={"/login"} onClick={this.props.closeMenu}>Login </Link>
+                                    <Link to={"/"} onClick={this.props.closeMenu}>MCGA App </Link>
+
                                 </ul>
                             )
                         }

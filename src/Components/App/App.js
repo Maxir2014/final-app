@@ -14,6 +14,7 @@ import { Login } from '../../Components/Login';
 import {Backdrop, NavBar} from "../Menu";
 import {Header} from "../Header";
 import {Home} from "../Home";
+import {Landing} from "../Landing";
 
 //styling
 
@@ -27,7 +28,6 @@ class App extends React.Component {
     }
     render() {
 
-        console.log(this.props.isActiveMenu);
         let backDrop = null;
         if(this.props.isActiveMenu){
             backDrop = <Backdrop/>
@@ -40,14 +40,16 @@ class App extends React.Component {
                         <NavBar/>
                         {backDrop}
                         <main className="dashboard">
-                        <Switch>
+                        <div className="container-fluid">
+                            <Switch>
                                 <PrivateRouteRender exact path="/home" component={Home} />
                                 <Route exact path="/login" component={Login} />
+                                <Route path='/' component={Landing}/>
                                 {/*<Route path="/register" component={RegisterPage} />*/}
                                 <Redirect from="*" to="/" />
                             </Switch>
+                        </div>
                         </main>
-
                 </Router>
 
         );
