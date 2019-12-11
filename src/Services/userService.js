@@ -1,5 +1,6 @@
 import { authHeader } from '../Utils';
-import { loginApi } from "../Utils";
+import { loginApi , allUsers } from "../Utils";
+import { User } from '../Entities';
 
 const login = (email, password) => {
     const requestOptions = {
@@ -9,7 +10,8 @@ const login = (email, password) => {
     };
     return fetch(loginApi, requestOptions)
         .then(handleResponse)
-        .then(user => {
+        .then(data => {
+            let user = data.user;
             localStorage.setItem('user', JSON.stringify(user));
             return user;
         });
@@ -41,20 +43,31 @@ const update = (user) => {
     return fetch(`/users/${user.id}`, requestOptions).then(handleResponse);;
 };
 
+const getAll = () => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json' },
+    };
+    return fetch(allUsers, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data;
+        });
+};
+
 const handleResponse = (response) => {
     return response.text().then(text => {
-        const data = text && JSON.parse(text);
+        const res = text && JSON.parse(text);
         if (!response.ok) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 logout();
                 window.location.reload(true);
             }
-            const error = (data && data.message) || response.statusText;
+            const error = (res && res.message) || response.statusText;
             return Promise.reject(error);
         }
-
-        return data;
+        return res.data;
     });
 };
 
@@ -63,5 +76,6 @@ export const userService = {
     logout,
     register,
     update,
+    getAll,
     handleResponse
 };

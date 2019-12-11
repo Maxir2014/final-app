@@ -1,8 +1,19 @@
 import React, {Fragment} from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import './Landing.css'
+import {userActions} from "../../Actions";
+import {users} from "../../Reducers/user";
 class Landing extends React.Component {
+    constructor(props) {
+        super(props);
+        this.props.getUsers();
+    }
+
     render() {
+
+
 
         return (
             <Fragment>
@@ -13,26 +24,37 @@ class Landing extends React.Component {
                     <hr className="my-4"/>
                         <p>This is a simple web application designed to schedule tasks created in the MCGA college class </p>
                         <p className="lead">
-                            <a className="btn btn-primary btn-lg" href="/login" role="button">I want to know more!</a>
+                            <Link to={'/login'} className="btn btn-primary btn-lg"> I want to know more!</Link>
                         </p>
                 </div>
-                <div className="loader"/>
-                <div className="col-md-6 offset-4">
-                    <h1>Currents users </h1>
-                </div>
+                { this.props.loading ?
+                    (
+                        <Fragment>
+                            <div className="loader"/>
+                        </Fragment>
+                    ):(
+                        <Fragment>
+                            <div className="col-md-6 offset-md-4 col-xs-4 offset-xs-1">
+                                <h2>Currents users: {this.props.userCount} </h2>
+                            </div>
+                        </Fragment>
+
+                    )}
             </Fragment>
 
 
         );
     }
 }
-function mapState(state) {
+function mapStateToProps(state) {
+    const { loading ,userCount } = state.users;
+    return { userCount, loading }
 
 }
 
 const actionCreators = {
-
+    getUsers: userActions.getCountUsers
 };
 
-const connectedLanding = connect(mapState, actionCreators)(Landing);
+const connectedLanding = connect(mapStateToProps, actionCreators)(Landing);
 export { connectedLanding as Landing };

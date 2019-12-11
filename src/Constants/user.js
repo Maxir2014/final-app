@@ -9,6 +9,10 @@ export const userConstants = {
 
     LOGOUT: 'USERS_LOGOUT',
 
+    GET_ALL_REQUEST: 'GET_ALL_REQUEST',
+    GET_ALL_SUCCESS: 'GET_ALL_SUCCESS',
+    GET_ALL_FAILURE: 'GET_ALL_FAILURE',
+
 
     GET_AUTH_USER: 'GET_AUTH_USER',
 

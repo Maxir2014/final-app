@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './Home.css'
+import {Todo, User} from "../../Entities";
 class Home extends React.Component {
     constructor(props) {
         super(props);
-
+        this.user = new User(this.props.user);
     }
 
     handleChange(e) {
+
 
     }
 
@@ -17,6 +19,8 @@ class Home extends React.Component {
     }
 
     render() {
+        const thingsPending = this.user.thingsPending();
+
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -25,17 +29,28 @@ class Home extends React.Component {
                             <div className="card-header">
                                 Tasks to do
                             </div>
-                            <div className="card-body">
-                                <div className="input-group mb-3">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text">Description</span>
+                            {thingsPending.map( (thing, key) => {
+                                return  <div key={key} className="card-body">
+                                    <div className="input-group mb-3">
+                                        <div className="input-group">
+                                            <div className="input-group-prepend">
+                                                <span className="input-group-text">{thing.title}</span>
+                                            </div>
+                                            <textarea className="form-control"
+                                                      aria-label="With textarea"
+
+                                            >
+                                                {thing.description}
+                                            </textarea>
                                         </div>
-                                        <textarea className="form-control" aria-label="With textarea"></textarea>
                                     </div>
+                                    <a href="#" className="btn btn-primary">Finish him</a>
                                 </div>
-                                <a href="#" className="btn btn-primary">Finish him</a>
-                            </div>
+                            })}
+
+
+
+
                         </div>
                     </div>
                     <div className="col-md-6">
@@ -44,10 +59,17 @@ class Home extends React.Component {
                                 Tasks killed
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title">Special title treatment</h5>
-                                <p className="card-text">It's a broader card with text below as a natural lead-in to extra
-                                    content. This content is a little longer.</p>
-                                <a href="#" className="btn btn-primary">Relive the task</a>
+
+                                <div className="input-group mb-3">
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text">Description</span>
+                                        </div>
+                                        <textarea className="form-control" aria-label="With textarea"></textarea>
+                                    </div>
+                                </div>
+
+                                <a href="#" className="btn btn-primary">Mark as pending</a>
                             </div>
                         </div>
                     </div>
@@ -58,7 +80,8 @@ class Home extends React.Component {
 }
 
 function mapState(state) {
-
+    const { user } = state.authentication;
+    return { user };
 }
 
 const actionCreators = {

@@ -5,11 +5,13 @@ const getApi = () => { return (environment === 'local') ? localApi : productionA
 
 const loginApi = getApi()+'auth/login';
 const createUser = getApi()+'users/create';
+const allUsers = getApi()+'users/list';
 
 
 
 export {
     getApi,
     loginApi,
+    allUsers,
     createUser
 };
