@@ -2,6 +2,10 @@
   "name": "final-app",
   "version": "0.1.0",
   "private": true,
+  "engines":{
+    "node":"10.9.0",
+    "npm": "6.2.0"
+  },
   "dependencies": {
     "history": "^4.10.1",
     "moment": "^2.24.0",
