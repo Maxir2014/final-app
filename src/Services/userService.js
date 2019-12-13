@@ -11,7 +11,7 @@ const login = (email, password) => {
     return fetch(loginApi, requestOptions)
         .then(handleResponse)
         .then(data => {
-            let user = data.user;
+            let user = new User(data.user);
             localStorage.setItem('user', JSON.stringify(user));
             return user;
         });
@@ -62,13 +62,13 @@ const handleResponse = (response) => {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 logout();
-                window.location.reload(true);
+               //window.location.reload(true);
             }
             const error = (res && res.message) || response.statusText;
             return Promise.reject(error);
         }
         return res.data;
-    });
+    })
 };
 
 export const userService = {

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { userActions } from '../../Actions';
 import './Login.css'
 import { Redirect } from "react-router-dom";
+import { Error } from '../Errors';
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -25,7 +26,6 @@ class Login extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
         this.setState({ submitted: true });
         const { email, password } = this.state;
         if (email && password) {
@@ -33,8 +33,14 @@ class Login extends React.Component {
         }
     }
 
+
+
     render() {
-        const { loggedIn, user } = this.props;
+        let errorHandler = '';
+        if(this.props.loginError){
+            errorHandler =  <Error message={this.props.loginError}/>
+        }
+        const { loggedIn } = this.props;
         if(loggedIn) {
             return <Redirect to={{ pathname: '/home' }} />
         }
@@ -46,7 +52,9 @@ class Login extends React.Component {
                         <div className="container">
                             <div className="login-container">
                                 <div id="output"/>
-                                <div className="avatar"/>
+                                <div >
+                                    {errorHandler}
+                                </div>
                                 <div className="form-box">
 
                                     <form name="form" onSubmit={this.handleSubmit}>
@@ -84,7 +92,7 @@ class Login extends React.Component {
                                         </Fragment>
 
                                         )}
-                                        <button className="btn btn-block login">
+                                        <button type="submit" className="btn btn-block login">
                                             Login
                                         </button>
                                     </form>
@@ -99,8 +107,8 @@ class Login extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { loginIn, loggedIn , user } = state.authentication;
-    return { loginIn, loggedIn, user };
+    const { loginIn, loggedIn , user , loginError } = state.authentication;
+    return { loginIn, loggedIn, user, loginError };
 }
 
 const actionCreators = {

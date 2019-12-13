@@ -10,3 +10,6 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log('Server is up!');
 });
+
+// this going in package json
+//node server/server.js
