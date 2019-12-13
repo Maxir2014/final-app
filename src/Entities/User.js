@@ -17,7 +17,7 @@ export class User {
 
     populateThings(data){ return data.map( thing => new Todo(thing) ) };
 
-    thingsPending = () => { return this.thingsTodo.map( (thing) => {
+    thingsPending(){ return this.thingsTodo.map( (thing) => {
         if(thing.status === 'pending'){ return thing}
     })};
 
