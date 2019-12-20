@@ -1,19 +1,53 @@
-import { alertConstants } from '../Constants';
+import {todoConstants} from '../Constants';
 
-export function alert(state = {}, action) {
+export function thingsTodo(state = {}, action) {
     switch (action.type) {
-        case alertConstants.SUCCESS:
+        case todoConstants.GET_LIST:
             return {
-                type: 'alert-success',
-                message: action.message
+
+                itemList: action.itemList
             };
-        case alertConstants.ERROR:
+        case todoConstants.CREATE_TODO:
             return {
-                type: 'alert-danger',
-                message: action.message
+                response: action.todo
             };
-        case alertConstants.CLEAR:
-            return {};
+        case todoConstants.EDIT_TODO:
+            return {
+                response: action.response
+            };
+        case todoConstants.REMOVE_TODO:
+            return {
+                itemList: state.itemList.filter(item => item._id !== action.todoId),
+                successRemove: true,
+            };
+        case todoConstants.RECOVER_TODO:
+
+            return{
+                todoItemThing: action.todoThing
+            };
+        case todoConstants.TODO_FAILURE:
+        return{
+            response: action.error
+        };
+        case todoConstants.FINISHED_TODO:
+        return {
+            itemList: state.itemList.map(item => {
+                if (item.id === action.todoThing) {
+                    item.status = 'pending';
+                }
+                return item;
+            }),
+        };
+        case todoConstants.FINISH_TODO_EDITION:
+            return {
+                itemList: state.itemList.map(item => {
+                    if (item.id === action.todoThing) {
+                        item.status = 'pending';
+                    }
+                    return item;
+                }),
+            };
+
         default:
             return state
     }

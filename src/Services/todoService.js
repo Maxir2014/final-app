@@ -1,61 +1,99 @@
 import { authHeader } from '../Utils';
-import { loginApi , allUsers } from "../Utils";
-import { User } from '../Entities';
+import { createTodo  , todoEdit, getApi } from "../Utils";
+import {userService} from "./userService";
 
-const login = (email, password) => {
+
+const getTodoList = () => {
+
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    const Authorization = `Bearer ${user.token}`;
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Authorization },
     };
-    return fetch(loginApi, requestOptions)
+    const url = getApi()+'users/'+user.id+'/todo';
+    return fetch(url, requestOptions)
         .then(handleResponse)
         .then(data => {
-            let user = new User(data.user);
-            console.log(user);
-            user.setToken(data.token);
-            localStorage.setItem('user', JSON.stringify(user));
-            return user;
+            return data.thingsTodo;
         });
 };
 
-const logout = () =>  {
-    // remove user from local storage to log user out
-    localStorage.removeItem('user');
-    return true;
-};
 
-const register = (user) => {
+
+const removeTodoId = (todoId) => {
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    const Authorization = `Bearer ${user.token}`;
     const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Authorization },
     };
-
-    return fetch(`/users/register`, requestOptions).then(handleResponse);
-};
-
-const update = (user) => {
-    const requestOptions = {
-        method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
-
-    return fetch(`/users/${user.id}`, requestOptions).then(handleResponse);;
-};
-
-const getAll = () => {
-    const requestOptions = {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json' },
-    };
-    return fetch(allUsers, requestOptions)
+    const url = getApi()+'todo/'+todoId;
+    return fetch(url, requestOptions)
         .then(handleResponse)
         .then(data => {
             return data;
         });
 };
+const finishTodoId = (todoThing) => {
+    let user = JSON.parse(localStorage.getItem('user'));
+    const Authorization = `Bearer ${user.token}`;
+    todoThing.status = 'finished';
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Authorization },
+        body: JSON.stringify(todoThing)
+    };
+    const url = todoEdit+'/'+todoThing._id;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data;
+        });
+};
+
+const finishEdition = (todoThing) => {
+    let user = JSON.parse(localStorage.getItem('user'));
+    const Authorization = `Bearer ${user.token}`;
+    todoThing.status = 'pending';
+
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Authorization },
+        body: JSON.stringify(todoThing)
+    };
+    const url = todoEdit+'/'+todoThing._id;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data.todo;
+        });
+};
+
+
+const recoverTodo = (todoId) => {
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    const Authorization = `Bearer ${user.token}`;
+    const requestOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'Authorization': Authorization },
+    };
+    const url = getApi()+'todo/'+todoId;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .then(data => {
+            return data;
+        });
+};
+
+
+
+
+
 
 const handleResponse = (response) => {
     return response.text().then(text => {
@@ -63,21 +101,22 @@ const handleResponse = (response) => {
         if (!response.ok) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
-                logout();
+                // userService.logout();
                //window.location.reload(true);
             }
             const error = (res && res.message) || response.statusText;
             return Promise.reject(error);
         }
+
         return res.data;
     })
 };
 
-export const userService = {
-    login,
-    logout,
-    register,
-    update,
-    getAll,
-    handleResponse
+export const todoService = {
+    getTodoList,
+    handleResponse,
+    removeTodoId,
+    finishTodoId,
+    recoverTodo,
+    finishEdition
 };

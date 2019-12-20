@@ -19,6 +19,7 @@ import {Landing} from "../Landing";
 //styling
 
 import './App.css';
+import {Todo, TodoEdit} from "../Todo";
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -43,9 +44,10 @@ class App extends React.Component {
                         <div className="container-fluid">
                             <Switch>
                                 <PrivateRouteRender exact path="/home" component={Home} />
+                                <PrivateRouteRender exact path="/edit/:id" component={TodoEdit} />
+                                <PrivateRouteRender exact path="/create/todo" component={Todo} />
                                 <Route exact path="/login" component={Login} />
                                 <Route path='/' component={Landing}/>
-                                {/*<Route path="/register" component={RegisterPage} />*/}
                                 <Redirect from="*" to="/" />
                             </Switch>
                         </div>

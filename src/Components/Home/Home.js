@@ -1,77 +1,87 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import './Home.css'
-import {Todo, User} from "../../Entities";
+
+import {todoActions} from "../../Actions/todo";
+import {Link} from "react-router-dom";
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.user = new User(this.props.user);
     }
 
-    handleChange(e) {
-
-
+    componentDidMount() {
+        this.props.getTodoList();
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-
+    handleDeleteThing(id) {
+        return (e) => {
+            this.props.removeTodo(id);
+        }
+    }
+    handleFinish(thingTodo) {
+        return (e) => {
+            this.props.finishTodo(thingTodo);
+        }
     }
 
     render() {
-        const thingsPending = this.user.thingsPending();
-
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-6">
-                        <div className="card">
-                            <div className="card-header">
-                                Tasks to do
-                            </div>
-                            {thingsPending.map( (thing, key) => {
-                                return  <div key={key} className="card-body">
-                                    <div className="input-group mb-3">
-                                        <div className="input-group">
-                                            <div className="input-group-prepend">
-                                                <span className="input-group-text">{thing.title}</span>
-                                            </div>
-                                            <textarea className="form-control"
-                                                      aria-label="With textarea"
+                <div className="col-md-10 offset-1">
+                        <table className="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">To do</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            { this.props.itemList ?
+                                (
+                                    this.props.itemList.map((thingTodo, item) => {
+                                        return <tr key={item}>
+                                            <th scope="row">{thingTodo.title}</th>
+                                            <td >{thingTodo.date}</td>
+                                            <td>{thingTodo.description}</td>
+                                            <td>
+                                                <div className="row pull-rigth" >
+                                                    <div className="col-md-4">
+                                                        <Link to={`/edit/${thingTodo._id}`}
+                                                              className="icon-button-edit">Edit </Link>
+                                                    </div>
+                                                    <div className="col-md-4">
+                                                        <a type="button" className="icon-button-delete" onClick={this.handleDeleteThing(thingTodo._id)}>Delete</a>
+                                                    </div>
+                                                    {thingTodo.status !== 'finished' ?(
+                                                        <div className="col-md-4">
+                                                            <a type="button" className="icon-button-finish"
+                                                               onClick={this.handleFinish(thingTodo)}
+                                                            >Finish</a>
+                                                        </div>
+                                                    ):(
+                                                        <div className="col-md-4">
+                                                            <del><a type="button" className="icon-button-finished">Finished</a></del>
+                                                        </div>
+                                                    )}
 
-                                            >
-                                                {thing.description}
-                                            </textarea>
-                                        </div>
-                                    </div>
-                                    <a href="#" className="btn btn-primary">Finish him</a>
-                                </div>
-                            })}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    })
+                                ):(<></>)
+                            }
+                            </tbody>
+                        </table>
+                    <div className="row">
+                        <div className="col-md-4">
 
-
-
+                            <Link to={"/create/todo"} className="plus" onClick={this.props.closeMenu}>Login </Link>
 
                         </div>
                     </div>
-                    <div className="col-md-6">
-                        <div className="card">
-                            <div className="card-header">
-                                Tasks killed
-                            </div>
-                            <div className="card-body">
-
-                                <div className="input-group mb-3">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text">Description</span>
-                                        </div>
-                                        <textarea className="form-control" aria-label="With textarea"></textarea>
-                                    </div>
-                                </div>
-
-                                <a href="#" className="btn btn-primary">Mark as pending</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -81,10 +91,14 @@ class Home extends React.Component {
 
 function mapState(state) {
     const { user } = state.authentication;
-    return { user };
+    const { itemList , successRemove } = state.thingsTodo;
+    return { itemList, user, successRemove };
 }
 
 const actionCreators = {
+    getTodoList: todoActions.getTodoList,
+    removeTodo: todoActions.removeTodo,
+    finishTodo: todoActions.finishTodo
 
 };
 

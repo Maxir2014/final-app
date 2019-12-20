@@ -1,0 +1,45 @@
+.icon-button-edit{
+    border-bottom:solid 2px #521751;
+    padding:2px;
+    cursor: pointer;
+}
+.icon-button-delete{
+    border-bottom:solid 2px #dc3545!important;
+    padding:2px;
+    cursor: pointer;
+}
+
+.icon-button-finish{
+    border-bottom:solid 2px #28a745!important;
+    padding:2px;
+    cursor: pointer;
+}
+
+.plus {
+    display:inline-block;
+    width:50px;
+    height:50px;
+
+    background:
+            linear-gradient(#fff,#fff),
+            linear-gradient(#fff,#fff),
+            #000;
+    background-position:center;
+    background-size: 50% 2px,2px 50%; /*thickness = 2px, length = 50% (25px)*/
+    background-repeat:no-repeat;
+}
+
+.alt {
+    background:
+            linear-gradient(#000,#000),
+            linear-gradient(#000,#000);
+    background-position:center;
+    background-size: 50% 2px,2px 50%; /*thickness = 2px, length = 50% (25px)*/
+    background-repeat:no-repeat;
+}
+.radius {
+    border-radius:50%;
+}
+a.plus{
+    color:transparent!important;
+}

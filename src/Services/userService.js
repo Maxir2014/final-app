@@ -12,6 +12,8 @@ const login = (email, password) => {
         .then(handleResponse)
         .then(data => {
             let user = new User(data.user);
+            console.log(user);
+            user.setToken(data.token);
             localStorage.setItem('user', JSON.stringify(user));
             return user;
         });
