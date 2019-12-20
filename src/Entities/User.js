@@ -2,10 +2,11 @@ import {Todo} from "./Todo";
 
 export class User {
     constructor(data){
+        this.id = data._id;
         this.name = data.name;
         this.lastName = data.lastName;
         this.email = data.email;
-        this.thingsTodo = this.populateThings(data.thingsTodo);
+        this.token = "";
     }
 
     getFullName(){
@@ -15,11 +16,6 @@ export class User {
         this.token = token;
     };
 
-    populateThings(data){ return data.map( thing => new Todo(thing) ) };
-
-    thingsPending(){ return this.thingsTodo.map( (thing) => {
-        if(thing.status === 'pending'){ return thing}
-    })};
 
 
 
